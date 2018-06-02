@@ -1,6 +1,8 @@
 package demo.cosmos.core;
 
+import com.sun.org.apache.xpath.internal.operations.Mult;
 import demo.cosmos.model.ContentRecordSummer;
+import demo.cosmos.model.MultiThreadQuery;
 import demo.cosmos.model.PsCMSContentRecordImpl;
 import demo.cosmos.model.PsCampaignTargetClientImpl;
 import org.springframework.context.ApplicationContext;
@@ -41,11 +43,18 @@ public class Reproducer {
 		System.out.println(new Date().getTime()-start);
 	}
 
+	public static void testMultiThread(ApplicationContext ctx)
+	{
+		MultiThreadQuery multiThreadQuery = (MultiThreadQuery) ctx.getBean(MultiThreadQuery.class);
+		multiThreadQuery.runTask();
+	}
+
 	public static void main(String[] args) {
 
 		// For XML
 		ApplicationContext ctx = new GenericXmlApplicationContext("SpringConfig.xml");
-		testCampaign(ctx);
+//		testCampaign(ctx);
+		testMultiThread(ctx);
 		// For Annotation
 //		 ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringMongoConfig.class);
 //		MongoOperations mongoOperation = (MongoOperations) ctx.getBean("mongoTemplate");
