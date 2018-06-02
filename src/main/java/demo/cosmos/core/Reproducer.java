@@ -32,7 +32,7 @@ public class Reproducer {
 	{
 		PsCampaignTargetClientImpl psCampaignTargetClient = (PsCampaignTargetClientImpl) ctx.getBean(PsCampaignTargetClientImpl.class);
 		List<String> agentCodeist = new ArrayList<String>();
-		for(int i=0;i<500000;i++){
+		for(int i=0;i<100;i++){
 			agentCodeist.add(""+i);
 		}
 

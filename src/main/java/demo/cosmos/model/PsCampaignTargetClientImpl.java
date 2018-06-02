@@ -27,11 +27,11 @@ public class PsCampaignTargetClientImpl implements PsCampaignTargetClient {
 
 	public List<CampaignClient> findByCampaignIdAndAgentCodeIn(String campaignId, List<String> agentCodeList,
 			int type) {
-		 Criteria criteria = Criteria.where("campaign_id").is(campaignId);
-
-		 if (agentCodeList != null && agentCodeList.size() > 0) {
-		 criteria.andOperator(Criteria.where("agent_code").in(agentCodeList));
-		 }
+//		 Criteria criteria = Criteria.where("campaign_id").is(campaignId);
+//
+//		 if (agentCodeList != null && agentCodeList.size() > 0) {
+//		 criteria.andOperator(Criteria.where("agent_code").in(agentCodeList));
+//		 }
 
 		DBObject query1 = new BasicDBObject(); // setup the query criteria 设置查询条件
 		query1.put("campaign_id", campaignId);
