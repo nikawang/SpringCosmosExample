@@ -31,6 +31,9 @@ public class PsCMSContentRecordImpl implements PsCMSContentRecord {
     public void save(ContentRecord contentRecord) {
         mongoTemplate.save(contentRecord);
     }
+    public void saveSum(ContentRecordSummer contentRecordSummer) {
+        mongoTemplate.save(contentRecordSummer);
+    }
 
     @Override
     public List<ContentRecordSummer> findByContentIdAndUserIdInAndStartTimeAndEndTime(String contentId,
@@ -63,26 +66,26 @@ public class PsCMSContentRecordImpl implements PsCMSContentRecord {
         Criteria criteria = new Criteria();
 
         if (!(startTime > 0 || endTime > 0)) {
-            criteria = criteria.andOperator(Criteria.where("content_id").is(contentId),
-                    Criteria.where("user_id").in(userIdList));
+            criteria = criteria.andOperator(Criteria.where("contentId").is(contentId),
+                    Criteria.where("userId").in(userIdList));
         } else {
             if (startTime > 0 && endTime > 0) {
-                criteria = criteria.andOperator(Criteria.where("content_id").is(contentId),
-                        Criteria.where("user_id").in(userIdList), Criteria.where("create_time").gte(startTime),
-                        Criteria.where("create_time").lte(endTime));
+                criteria = criteria.andOperator(Criteria.where("contentId").is(contentId),
+                        Criteria.where("userId").in(userIdList), Criteria.where("createTime").gte(startTime),
+                        Criteria.where("createTime").lte(endTime));
             } else if (endTime > 0) {
-                criteria = criteria.andOperator(Criteria.where("content_id").is(contentId),
-                        Criteria.where("user_id").in(userIdList), Criteria.where("create_time").lte(endTime));
+                criteria = criteria.andOperator(Criteria.where("contentId").is(contentId),
+                        Criteria.where("userId").in(userIdList), Criteria.where("createTime").lte(endTime));
             } else {
-                criteria = criteria.andOperator(Criteria.where("content_id").is(contentId),
-                        Criteria.where("user_id").in(userIdList), Criteria.where("create_time").gte(startTime));
+                criteria = criteria.andOperator(Criteria.where("contentId").is(contentId),
+                        Criteria.where("userId").in(userIdList), Criteria.where("createTime").gte(startTime));
             }
         }
 
         Aggregation agg = Aggregation.newAggregation(
 
-                Aggregation.match(criteria), Aggregation.group("user_id").first("user_id").as("userId")
-                        .first("content_id").as("contentId").count().as("amount")
+                Aggregation.match(criteria), Aggregation.group("userId").first("userId").as("userId")
+                        .first("contentId").as("contentId").count().as("amount")
 
         );
 
@@ -91,9 +94,9 @@ public class PsCMSContentRecordImpl implements PsCMSContentRecord {
 
         if (contentRecordSummer != null && contentRecordSummer.size() > 0) {
             Aggregation minTimeAgg = Aggregation.newAggregation(
-                    Aggregation.match(Criteria.where("content_id").is(contentId)
-                            .andOperator(Criteria.where("user_id").in(userIdList))),
-                    Aggregation.group("user_id").first("user_id").as("userId").min("create_time").as("createTime"));
+                    Aggregation.match(Criteria.where("contentId").is(contentId)
+                            .andOperator(Criteria.where("userId").in(userIdList))),
+                    Aggregation.group("userId").first("userId").as("userId").min("createTime").as("createTime"));
 
             List<ContentRecordSummer> minTimeContentRecordSummer = mongoTemplate
                     .aggregate(minTimeAgg, TABLE_NAME, ContentRecordSummer.class).getMappedResults();

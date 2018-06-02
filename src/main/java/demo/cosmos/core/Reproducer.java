@@ -1,6 +1,5 @@
 package demo.cosmos.core;
 
-import demo.cosmos.model.ContentRecord;
 import demo.cosmos.model.ContentRecordSummer;
 import demo.cosmos.model.PsCMSContentRecordImpl;
 import org.springframework.context.ApplicationContext;
@@ -12,7 +11,7 @@ import java.util.List;
 
 //import org.springframework.context.support.GenericXmlApplicationContext;
 
-public class App {
+public class Reproducer {
 
 	public static void main(String[] args) {
 
@@ -25,27 +24,14 @@ public class App {
 		PsCMSContentRecordImpl psCMSContentRecord = (PsCMSContentRecordImpl) ctx.getBean(PsCMSContentRecordImpl.class);
 
 		List<String> userList = new ArrayList<String>();
-		List<String> contentList = new ArrayList<String>();
+		String contentId = "99999";
 
-		for(int i=0; i<10001; i++)
+		for(int i=0; i<991; i++)
 		{
 			userList.add(i+"");
 		}
 
-		ContentRecordSummer contentRecord = new ContentRecordSummer();
-
-		for(int i=0; i<1001; i++)
-		{
-			for(int j=0; j<10; j++) {
-				contentRecord.setContentId("99999");
-				contentRecord.setUserId(userList.get(i));
-				contentRecord.setAmount(1);
-				contentRecord.setCreateTime(i);
-				psCMSContentRecord.saveSum(contentRecord);
-			}
-
-			System.out.println(i);
-		}
+		psCMSContentRecord.findByContentIdAndUserIdInAndStartTimeAndEndTime(contentId, userList,0 ,9);
 
 	}
 

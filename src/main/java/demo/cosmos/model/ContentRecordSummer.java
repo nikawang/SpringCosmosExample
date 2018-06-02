@@ -1,9 +1,12 @@
 package demo.cosmos.model;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document(collection = "contentRecordSummer")
+@Document(collection = "t_content_record")
 public class ContentRecordSummer {
+    @Indexed
     private String userId;
     private String contentId;
     private long createTime;
