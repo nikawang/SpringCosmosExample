@@ -39,7 +39,7 @@ public class PsCampaignTargetClientImpl implements PsCampaignTargetClient {
 			query1.put("agent_code", (new BasicDBObject("$in", agentCodeList)));
 		}
 		DBCursor dbCursor = mongoTemplate.getCollection(TABLE_NAME).find(query1);
-//		dbCursor.batchSize(1000);
+		dbCursor.batchSize(100000);
 		List<CampaignClient> list = new ArrayList<>();
 		while (dbCursor.hasNext()) {
 			DBObject object = dbCursor.next();
