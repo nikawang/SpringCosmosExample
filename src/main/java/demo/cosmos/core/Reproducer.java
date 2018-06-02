@@ -2,6 +2,7 @@ package demo.cosmos.core;
 
 import demo.cosmos.model.ContentRecordSummer;
 import demo.cosmos.model.PsCMSContentRecordImpl;
+import demo.cosmos.model.PsCampaignTargetClientImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
@@ -12,26 +13,43 @@ import java.util.List;
 //import org.springframework.context.support.GenericXmlApplicationContext;
 
 public class Reproducer {
-
-	public static void main(String[] args) {
-
-		// For XML
-		ApplicationContext ctx = new GenericXmlApplicationContext("SpringConfig.xml");
-
-		// For Annotation
-//		 ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringMongoConfig.class);
-//		MongoOperations mongoOperation = (MongoOperations) ctx.getBean("mongoTemplate");
+	public static void testContent(ApplicationContext ctx)
+	{
 		PsCMSContentRecordImpl psCMSContentRecord = (PsCMSContentRecordImpl) ctx.getBean(PsCMSContentRecordImpl.class);
 
 		List<String> userList = new ArrayList<String>();
 		String contentId = "99999";
 
-		for(int i=0; i<991; i++)
+		for(int i=0; i<1000; i++)
 		{
 			userList.add(i+"");
 		}
 
 		psCMSContentRecord.findByContentIdAndUserIdInAndStartTimeAndEndTime(contentId, userList,0 ,9);
+	}
+
+	public static void testCampaign(ApplicationContext ctx)
+	{
+		PsCampaignTargetClientImpl psCampaignTargetClient = (PsCampaignTargetClientImpl) ctx.getBean(PsCampaignTargetClientImpl.class);
+		List<String> agentCodeist = new ArrayList<String>();
+		for(int i=0;i<500000;i++){
+			agentCodeist.add(""+i);
+		}
+
+		long start = new Date().getTime();
+		psCampaignTargetClient.findByCampaignIdAndAgentCodeIn("20",agentCodeist,2);
+		System.out.println(new Date().getTime()-start);
+	}
+
+	public static void main(String[] args) {
+
+		// For XML
+		ApplicationContext ctx = new GenericXmlApplicationContext("SpringConfig.xml");
+		testCampaign(ctx);
+		// For Annotation
+//		 ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringMongoConfig.class);
+//		MongoOperations mongoOperation = (MongoOperations) ctx.getBean("mongoTemplate");
+
 
 	}
 
